@@ -30,7 +30,7 @@ app.post( '/register', function( req, res ) {
     var user = new User( {
         firstName: req.body.firstName,
         lastName:  req.body.lastName,
-        email:      req.body.email,
+        email:     req.body.email,
         password:  req.body.password
     } );
     user.save( function( err ) {
@@ -47,6 +47,19 @@ app.post( '/register', function( req, res ) {
 } );
 app.get( '/login', function( req, res ) {
     res.render( "login.jade" );
+} );
+app.post( '/login', function( req, res ) {
+    User.findOne( { email: req.body.email }, function( err, user ) {
+        if ( ! user ) {
+            res.render( "login.jade", { error: "Incorrect email / password." } );
+        } else {
+            if ( req.body.password === user.password ) {
+                res.redirect( "/dashboard" );
+            } else {
+                res.render( "login.jade", { error: "Incorrect email / password." } );
+            };
+        };
+    } );
 } );
 app.get( '/dashboard', function( req, res ) {
     res.render( "dashboard.jade" );
