@@ -59,3 +59,11 @@ Submitting already existing email fields the same register page displayd with em
 git add .
 git commit -m "Creating an account enabled."
 git push
+
+branch gundars
+Submitting email and correct password dashboard opens.
+In case of wrong password message "ERROR: Incorrect email / password." displayd.
+The same message displayd in case of not existing email.
+git add .
+git commit -m "Logging in of existing users with correct password only enabled."
+git push
