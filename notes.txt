@@ -23,3 +23,12 @@ ctrl+C
 git add .
 git commit -m "Code base created"
 git push
+git push --set-upstream origin gundars
+
+branch gundars
+npm install body-parser
+node app.js
+>{"firstName":"G","lastName":"O","email":"g@mail.com","password":"1234"}
+git add .
+git commit -m "Parse and post submitted data"
+git push
