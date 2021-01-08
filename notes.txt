@@ -4,3 +4,22 @@ git commit -m "first commit"
 git branch -M main
 git remote add origin https://github.com/gundars-o/node-authentication.git
 git push -u origin main
+
+branch gundars
+mkdir views
+npm install touch-cli -g
+touch app.js
+touch views/base.jade
+touch views/index.jade
+touch views/register.jade
+touch views/login.jade
+touch views/dashboard.jade
+npm install express
+npm install jade
+npm init -y
+node app.js
+http://localhost:3000/
+ctrl+C
+git add .
+git commit -m "Code base created"
+git push
