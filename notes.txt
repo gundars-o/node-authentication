@@ -32,3 +32,30 @@ node app.js
 git add .
 git commit -m "Parse and post submitted data"
 git push
+
+branch gundars
+C:\Program Files\MongoDB\Server\4.2\bin\mongo.exe
+show databases
+use testdb (creating database or switching to existing database)
+show collections (showing tables)
+Create table "users":
+db.users.insert( { email: "r@rdegges.com", password: "woot" } );
+db.users.find();
+npm install mongoose
+Leave email field and delete password field:
+db.users.update( { email: "r@rdegges.com" }, { $unset: { password: "woot" } } );
+Delete email field:
+db.users.update( {}, { $unset: { email: "r@rdegges.com" } } );
+node app
+Switch to newly created database:
+use svcc
+db.users.find();
+Result:
+{ "_id" ObjectId("5ff8a958e7b1e12e4852dfc"), "firstName" : "Gundars", "lastName" : "Ozolins", "email" : "g@email.com", "password": "1234", "__v": 0 }
+After creating an acount Dashboard is opened:
+Dashboard
+Welcome to your dashboard! You are now logged in.
+Submitting already existing email fields the same register page displayd with empty fields.
+git add .
+git commit -m "Creating an account enabled."
+git push
