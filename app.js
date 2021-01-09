@@ -28,6 +28,31 @@ app.use( session( {
     duration: 30 * 60 * 1000,
     activeDuration: 5 * 60 * 1000 //optional
 } ) );
+app.use( function( req, res, next ) {
+    if ( req.session && req.session.user ) {
+        User.findOne( { email: req.session.user.email }, function( err, user ) {
+            // if a user was found, make the user available
+            if ( user ) {
+                req.user = user;
+                delete req.user.password; // don't make the password hash available
+                req.session.user = user; // update the session info
+                res.locals.user = user;  // make the user available to templates
+            };
+            next();
+        } );
+    } else {
+        next(); // if no session is available, do nothing
+    };
+} );
+function requireLogin( req, res, next ) {
+    if ( ! req.user ) {
+        // if this user isn't logged in, redirect them to the login page
+        res.redirect( "/login" );
+    } else {
+        // if the user is logged in, let them pass!
+        next();
+    };
+};
 app.get( '/', function( req, res ) {
     res.render( "index.jade" );
 } );
@@ -74,19 +99,7 @@ app.post( '/login', function( req, res ) {
         };
     } );
 } );
-app.get( '/dashboard', function( req, res ) {
-    if ( req.session && req.session.user ) {
-        User.findOne( { email: req.session.user.email }, function( err, user ) {
-            if ( ! user ) {
-                req.session.reset();
-                res.redirect( "/login" );
-            } else {
-                res.locals.user = user;
-                res.render( "dashboard.jade" );
-            };
-        } );
-    } else {
-        res.redirect( "/login" );
-    };
+app.get( '/dashboard', requireLogin, function( req, res ) {
+    res.render( "dashboard.jade" );
 } );
 app.listen( 3000 );
