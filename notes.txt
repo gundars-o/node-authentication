@@ -88,3 +88,19 @@ npm install client-sessions
 git add .
 git commit -m "Sessions added."
 git push
+
+branch gundars
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email" : "g@email.com",
+    "password" : "1234"
+}
+working now because of line
+    app.use( bodyParser.json() );
+added.
+"Wrong credentials on dashboard after creating a new user." issue solved.
+git add .
+git commit -m "2 bugs fixed."
+git push

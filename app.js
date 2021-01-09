@@ -20,6 +20,7 @@ var User = mongoose.model(
 );
 app.set( "view engine", "jade" );
 app.use( bodyParser.urlencoded( { extended: true } ) );
+app.use( bodyParser.json() );
 app.use( session( {
     cookieName: "session",
     secret: "some_random_string",
@@ -48,6 +49,7 @@ app.post( '/register', function( req, res ) {
             };
             res.render( "register.jade", { error: error } );
         } else {
+            req.session.user = user;
             res.redirect( "/dashboard" );
         };
     } );
