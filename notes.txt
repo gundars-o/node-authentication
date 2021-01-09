@@ -67,3 +67,18 @@ The same message displayd in case of not existing email.
 git add .
 git commit -m "Logging in of existing users with correct password only enabled."
 git push
+
+branch gundars
+touch requests.rest
+This is not working:
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email" : "g@email.com",
+    "password" : "1234"
+}
+The body of request has been lost and is an empty object in response body. The same in Postman.
+git add .
+git commit -m "Experiments with REST Client"
+git push
