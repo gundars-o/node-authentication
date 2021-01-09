@@ -1,8 +1,9 @@
-var express = require( "express" );
+var express    = require( "express" );
 var bodyParser = require( "body-parser" );
-var session = require( "client-sessions" );
+var mongoose   = require( "mongoose" );
+var session    = require( "client-sessions" );
+var bcrypt     = require( "bcryptjs" );
 var app = express();
-var mongoose = require( "mongoose" );
 mongoose.connect( "mongodb://localhost/svcc", { useNewUrlParser: true, useUnifiedTopology: true } );
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
@@ -35,11 +36,13 @@ app.get( '/register', function( req, res ) {
 } );
 // Creating users
 app.post( '/register', function( req, res ) {
+    var salt = bcrypt.genSaltSync( 10 );
+    var hash = bcrypt.hashSync( req.body.password, salt );
     var user = new User( {
         firstName: req.body.firstName,
         lastName:  req.body.lastName,
         email:     req.body.email,
-        password:  req.body.password
+        password:  hash
     } );
     user.save( function( err ) {
         if ( err ) {
@@ -62,7 +65,7 @@ app.post( '/login', function( req, res ) {
         if ( ! user ) {
             res.render( "login.jade", { error: "Incorrect email / password." } );
         } else {
-            if ( req.body.password === user.password ) {
+            if ( bcrypt.compareSync( req.body.password, user.password ) ) {
                 req.session.user = user;
                 res.redirect( "/dashboard" );
             } else {

@@ -104,3 +104,10 @@ added.
 git add .
 git commit -m "2 bugs fixed."
 git push
+
+branch gundars
+npm install bcryptjs
+db.users.remove( { } )
+git add .
+git commit -m "Hash passwords."
+git push
