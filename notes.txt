@@ -82,3 +82,9 @@ The body of request has been lost and is an empty object in response body. The s
 git add .
 git commit -m "Experiments with REST Client"
 git push
+
+branch gundars
+npm install client-sessions
+git add .
+git commit -m "Sessions added."
+git push
