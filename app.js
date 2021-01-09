@@ -1,5 +1,6 @@
 var express = require( "express" );
 var bodyParser = require( "body-parser" );
+var session = require( "client-sessions" );
 var app = express();
 var mongoose = require( "mongoose" );
 mongoose.connect( "mongodb://localhost/svcc", { useNewUrlParser: true, useUnifiedTopology: true } );
@@ -19,6 +20,12 @@ var User = mongoose.model(
 );
 app.set( "view engine", "jade" );
 app.use( bodyParser.urlencoded( { extended: true } ) );
+app.use( session( {
+    cookieName: "session",
+    secret: "some_random_string",
+    duration: 30 * 60 * 1000,
+    activeDuration: 5 * 60 * 1000 //optional
+} ) );
 app.get( '/', function( req, res ) {
     res.render( "index.jade" );
 } );
@@ -54,6 +61,7 @@ app.post( '/login', function( req, res ) {
             res.render( "login.jade", { error: "Incorrect email / password." } );
         } else {
             if ( req.body.password === user.password ) {
+                req.session.user = user;
                 res.redirect( "/dashboard" );
             } else {
                 res.render( "login.jade", { error: "Incorrect email / password." } );
@@ -62,6 +70,18 @@ app.post( '/login', function( req, res ) {
     } );
 } );
 app.get( '/dashboard', function( req, res ) {
-    res.render( "dashboard.jade" );
+    if ( req.session && req.session.user ) {
+        User.findOne( { email: req.session.user.email }, function( err, user ) {
+            if ( ! user ) {
+                req.session.reset();
+                res.redirect( "/login" );
+            } else {
+                res.locals.user = user;
+                res.render( "dashboard.jade" );
+            };
+        } );
+    } else {
+        res.redirect( "/login" );
+    };
 } );
 app.listen( 3000 );
