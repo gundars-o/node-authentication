@@ -127,3 +127,8 @@ branch gundars
 git add .
 git commit -m "Cookies secured."
 git push
+
+branch gundars
+git add .
+git commit -m "Eliminated DeprecationWarning: collection.ensureIndex is deprecated. Use createIndexes instead."
+git push

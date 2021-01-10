@@ -5,7 +5,11 @@ var session    = require( "client-sessions" );
 var bcrypt     = require( "bcryptjs" );
 var csrf       = require( "csurf" );
 var app = express();
-mongoose.connect( "mongodb://localhost/svcc", { useNewUrlParser: true, useUnifiedTopology: true } );
+mongoose.connect( "mongodb://localhost/svcc", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true
+} );
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 var User = mongoose.model(
