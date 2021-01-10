@@ -27,7 +27,10 @@ app.use( session( {
     cookieName: "session",
     secret: "some_random_string",
     duration: 30 * 60 * 1000,
-    activeDuration: 5 * 60 * 1000 //optional
+    activeDuration: 5 * 60 * 1000, //optional
+    httpOnly: true,  // don't let JS code access cookies
+    secure: true,    // only set cookies over https
+    ephemeral: true // destroy cookies when the browser closes
 } ) );
 app.use( function( req, res, next ) {
     if ( req.session && req.session.user ) {
