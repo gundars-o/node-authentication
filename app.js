@@ -3,6 +3,7 @@ var bodyParser = require( "body-parser" );
 var mongoose   = require( "mongoose" );
 var session    = require( "client-sessions" );
 var bcrypt     = require( "bcryptjs" );
+var csrf       = require( "csurf" );
 var app = express();
 mongoose.connect( "mongodb://localhost/svcc", { useNewUrlParser: true, useUnifiedTopology: true } );
 var Schema = mongoose.Schema;
@@ -44,6 +45,7 @@ app.use( function( req, res, next ) {
         next(); // if no session is available, do nothing
     };
 } );
+app.use( csrf() );
 function requireLogin( req, res, next ) {
     if ( ! req.user ) {
         // if this user isn't logged in, redirect them to the login page
@@ -57,7 +59,7 @@ app.get( '/', function( req, res ) {
     res.render( "index.jade" );
 } );
 app.get( '/register', function( req, res ) {
-    res.render( "register.jade" );
+    res.render( "register.jade", { csrfToken: req.csrfToken() } );
 } );
 // Creating users
 app.post( '/register', function( req, res ) {
@@ -83,7 +85,7 @@ app.post( '/register', function( req, res ) {
     } );
 } );
 app.get( '/login', function( req, res ) {
-    res.render( "login.jade" );
+    res.render( "login.jade", { csrfToken: req.csrfToken() } );
 } );
 app.post( '/login', function( req, res ) {
     User.findOne( { email: req.body.email }, function( err, user ) {
